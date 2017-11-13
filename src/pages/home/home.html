@@ -1,17 +1,64 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Workout Log</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <ion-grid>
+    <ion-row>
+      <!-- *********** ADD EXERCISE ************ -->
+      <ion-col col-12 col-lg-6>
+        <ion-card color="primary" (click)="toggleExercises()">
+          <ion-item color="primary">
+            <h1>Exercises</h1>
+            <ion-icon name="remove" item-end small *ngIf="showExercises"></ion-icon>
+            <ion-icon name="add" item-end small *ngIf="!showExercises"></ion-icon>
+          </ion-item>
+        </ion-card>
+        
+        <ion-card color="dark">
+            <form [formGroup]="newExerciseForm" (ngSubmit)="addExercise()">
+          
+                <ion-input color="dark" formControlName="exercise" placeholder="Add An Exercise"></ion-input>
+                <button ion-button block small class="btn-add-exercise" type="submit" color="secondary" [disabled]="!newExerciseForm.valid">Add Exercise</button>
+            </form>
+          <ion-list no-lines color="dark" *ngIf="showExercises">
+            <ion-item color="dark" ion-item *ngFor="let exercise of exercises">
+                {{ exercise }}
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+  <!-- *********** ADD WOROUT ************ -->
+      <ion-col col-12 col-lg-6>
+        <ion-card color="primary" (click)="toggleWorkouts()">
+          <ion-item color="primary">
+            <h1>Workouts</h1>
+            <ion-icon name="remove" item-end small *ngIf="showWorkouts"></ion-icon>
+            <ion-icon name="add" item-end small *ngIf="!showWorkouts"></ion-icon>
+          </ion-item>
+        </ion-card>
+        
+        <ion-card color="dark">
+          <button ion-button block small color="secondary" (click)="openAddWorkout()">Add Workout</button>
+          <ion-list no-lines color="dark" *ngIf="showWorkouts">
+  
+            <ion-item color="dark" ion-item (click)="toggleWorkout()" *ngFor="let workout of workouts">
+              <!-- <ion-icon name="star" item-start></ion-icon> -->
+                <span (click)="workoutSelected($event, workout.name)">{{ workout.name }}</span>
+                <span [hidden]="!showWorkout">
+                  <ion-item color="dark" *ngFor="let exercise of workout.exercise">
+                    <p>{{ exercise.name }}</p>
+                    <p> Sets - {{ exercise.sets }}</p>
+                  </ion-item>
+                </span>
+              </ion-item>
+              
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

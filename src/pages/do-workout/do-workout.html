@@ -1,0 +1,97 @@
+<!--
+  Generated template for the DoWorkoutPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Workout</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card color="primary">
+    <ion-card-header text-center>
+      <h1>{{ workout }}</h1>
+    </ion-card-header>
+  </ion-card>
+
+  <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
+
+  <ion-grid>
+    <ion-card color="dark" *ngFor="let exercise of currentWorkout.exercise; let idx = index">
+      
+      <ion-item text-center color="primary" (click)="toggleWorkout(idx)">
+        {{ exercise.name }}
+        <ion-icon name="remove" item-end small *ngIf="showWorkout[idx]"></ion-icon>
+        <ion-icon name="add" item-end small *ngIf="!showWorkout[idx]"></ion-icon>
+      </ion-item>
+
+      <div no-lines [hidden]="!showWorkout[idx]">
+        <ion-row text-center>
+          <ion-col col-2>Set #</ion-col>
+          <ion-col col-7>Weight</ion-col>
+          <ion-col col-3>Reps</ion-col>
+        </ion-row>
+
+        <div formArrayName="items"
+        *ngFor="let item of workoutForm.get('items').controls; let formIndex = index;">
+        <div [formGroupName]="formIndex">
+
+        <ion-list no-lines *ngIf="sets">
+          <ion-item-sliding #item>
+            <ion-item color="dark">
+              <ion-row class="sets" justify-content-center>
+                <ion-col col-2>
+                  <p>{{ formIndex + 1}}</p>
+                  <input type="text" formControlName="exerciseName" value="{{exercise.name}}">
+                  <input type="text" formControlName="setNum" value="{{i + 1}}">
+                </ion-col>
+                <ion-col col-7>
+                  <input type="text" formControlName="weight" placeholder="lbs">
+                </ion-col>
+                <ion-col col-3>
+                  <input type="text" formControlName="reps" placeholder="#">
+                </ion-col>
+              </ion-row>
+            </ion-item>
+            <ion-item-options side="right">
+              <a ion-button class="btn-delete" color="danger" (click)="deleteSet(item, exercise)">
+                <ion-icon name="trash"></ion-icon>
+              </a>
+            </ion-item-options>
+
+          </ion-item-sliding>
+        </ion-list>
+
+        </div>
+        </div>
+        
+        <ion-row>
+          <ion-col>
+            <a ion-button small block color="dark" (click)="addSet(exercise)">Add Set</a>
+          </ion-col>
+          <ion-col>
+            <a ion-button small block color="dark" (click)="deleteSet(item, exercise)">Delete Set</a>
+          </ion-col>
+        </ion-row>
+
+      </div>
+
+    </ion-card>
+
+    <ion-row>
+      <ion-col width-80>
+        <button ion-button small block color="dark">Workout Completed</button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  </form>
+
+</ion-content>
