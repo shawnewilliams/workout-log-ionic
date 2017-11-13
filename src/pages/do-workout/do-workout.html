@@ -48,8 +48,8 @@
               <ion-row class="sets" justify-content-center>
                 <ion-col col-2>
                   <p>{{ formIndex + 1}}</p>
-                  <input type="text" formControlName="exerciseName" value="{{exercise.name}}">
-                  <input type="text" formControlName="setNum" value="{{i + 1}}">
+                  <input [hidden]="true" type="text" formControlName="exerciseName" value="{{exercise.name}}">
+                  <input [hidden]="true" type="text" formControlName="setNum" value="{{i + 1}}">
                 </ion-col>
                 <ion-col col-7>
                   <input type="text" formControlName="weight" placeholder="lbs">
