@@ -21,12 +21,13 @@
   </ion-card>
 
   <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
-
   <ion-grid>
     <ion-card color="dark" *ngFor="let exercise of currentWorkout.exercise; let idx = index">
       
       <ion-item text-center color="primary" (click)="toggleWorkout(idx)">
         {{ exercise.name }}
+
+        <!-- {{incrementNumber()}} -->
         <ion-icon name="remove" item-end small *ngIf="showWorkout[idx]"></ion-icon>
         <ion-icon name="add" item-end small *ngIf="!showWorkout[idx]"></ion-icon>
       </ion-item>
@@ -39,36 +40,32 @@
         </ion-row>
 
         <div formArrayName="items"
-        *ngFor="let item of workoutForm.get('items').controls; let formIndex = index;">
-        <div [formGroupName]="formIndex">
+             *ngFor="let set of sets[idx]; let formIndex = index">
+          <div [formGroupName]="set">
+            <ion-list no-lines *ngIf="sets">
+              <ion-item-sliding #item>
+                <ion-item color="dark">
+                  <ion-row class="sets" justify-content-center>
+                    <ion-col col-2>
+                      <p>{{ formIndex + 1 }}</p>
+                    </ion-col>
+                    <ion-col col-7>
+                      <input type="text" formControlName="weight" placeholder="lbs">
+                    </ion-col>
+                    <ion-col col-3>
+                      <input type="text" formControlName="reps" placeholder="#">
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+                <ion-item-options side="right">
+                  <a ion-button class="btn-delete" color="danger" (click)="deleteSet(item, exercise)">
+                    <ion-icon name="trash"></ion-icon>
+                  </a>
+                </ion-item-options>
 
-        <ion-list no-lines *ngIf="sets">
-          <ion-item-sliding #item>
-            <ion-item color="dark">
-              <ion-row class="sets" justify-content-center>
-                <ion-col col-2>
-                  <p>{{ formIndex + 1}}</p>
-                  <input [hidden]="true" type="text" formControlName="exerciseName" value="{{exercise.name}}">
-                  <input [hidden]="true" type="text" formControlName="setNum" value="{{i + 1}}">
-                </ion-col>
-                <ion-col col-7>
-                  <input type="text" formControlName="weight" placeholder="lbs">
-                </ion-col>
-                <ion-col col-3>
-                  <input type="text" formControlName="reps" placeholder="#">
-                </ion-col>
-              </ion-row>
-            </ion-item>
-            <ion-item-options side="right">
-              <a ion-button class="btn-delete" color="danger" (click)="deleteSet(item, exercise)">
-                <ion-icon name="trash"></ion-icon>
-              </a>
-            </ion-item-options>
-
-          </ion-item-sliding>
-        </ion-list>
-
-        </div>
+              </ion-item-sliding>
+            </ion-list>
+          </div>
         </div>
         
         <ion-row>
