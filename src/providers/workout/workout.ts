@@ -37,10 +37,27 @@ export class WorkoutProvider {
     const countArray = [];
       workout.exercise.forEach((exercise, index) => {
       countArray.push( (Array.from(new Array(+workout.exercise[index].sets), (x,i) => i + count)) );
-      count += exercise.sets;
-      }
-    );
+      count += +exercise.sets;
+      });
     return countArray;
   }
 // **********
+
+  // ********* returns numbered sets for each workout [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5]
+  getSetNumArray(workout: Workout){
+    const countNumArray = [];
+      workout.exercise.forEach((exercise, index) => {
+      countNumArray.push( (Array.from(new Array(+workout.exercise[index].sets), (x,i) => i + 1)) );
+      });
+    return countNumArray.reduce((a, b) => a.concat(b));
+  }
+
+  getExerciseNamesArray(workout: Workout) {
+    const exerciseNameArray = [];
+    workout.exercise.map((item, index)=>{
+      exerciseNameArray.push(Array(+workout.exercise[index].sets).fill(workout.exercise[index].name));
+    });
+    return exerciseNameArray.reduce((a, b) => a.concat(b));
+  }
+
 }

@@ -27,18 +27,18 @@ export class DoWorkoutPage implements OnInit {
   workout: string;
   currentWorkout: Workout;
   savedWorkouts: Workout[];
-  sets;  // flattenedSets;
+  sets: number[];
 
-  showWorkout; //toggle workout
+  showWorkout: boolean[]; //toggle workout
 
   workoutForm: FormGroup;
   items: FormArray;
 
-  exerciseName = '';
-  exerciseNameArray = [];
-  count: number;
+  exerciseNameArray: String[];
+
+  setNumArray: number[];
+
   countArray: any[];
-  arrayCount: number;
 
 
   constructor(public navCtrl: NavController, 
@@ -48,10 +48,6 @@ export class DoWorkoutPage implements OnInit {
     private workoutService: WorkoutProvider) {
 
       this.workout = this.navParams.get('workout');
-      // console.log(this.workout)
-      this.showWorkout = []; //toggles workout
-
-      this.countArray = [];
       
   }
 
@@ -59,12 +55,8 @@ export class DoWorkoutPage implements OnInit {
     
     this.savedWorkouts = WORKOUTS;
     this.currentWorkout = this.workoutService.getWorkout(this.workout);
-    // console.log(this.sets);
-    // console.log(this.currentWorkout);
 
-    this.showWorkout = this.currentWorkout.exercise.map(() => true);
-    // console.log(this.currentWorkout)
-    // console.log(this.showWorkout)
+    this.showWorkout = this.currentWorkout.exercise.map(() => true); //toggle workout array
     
     this.workoutForm = this.formBuilder.group({
       workoutName: this.workout,
@@ -74,34 +66,19 @@ export class DoWorkoutPage implements OnInit {
     // ********* i.e. sets = [[0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14]]
     this.sets = this.workoutService.getSetsArray(this.currentWorkout);
 
-    this.currentWorkout.exercise.map((item, index)=>{
-      return this.exerciseNameArray.push(Array(+this.currentWorkout.exercise[index].sets).fill(this.currentWorkout.exercise[index].name))
-    });
+    // ********* returns an array like [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5]
+    this.setNumArray = this.workoutService.getSetNumArray(this.currentWorkout);
 
-    this.exerciseNameArray = this.exerciseNameArray.reduce((a, b) => a.concat(b))
-    
-    this.exerciseNameArray.forEach((exercise, index) => {
-      this.exerciseName = this.exerciseNameArray[index];
-      // this.count.push(index)
-      this.addItem()
+    // ******** returns an array of exercise names
+    this.exerciseNameArray = this.workoutService.getExerciseNamesArray(this.currentWorkout);
 
-      this.count = -1;
-    });
+    this.addItems(this.exerciseNameArray, this.setNumArray);
 
-// ********* returns an array [[0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14]]
-    this.countArray = this.workoutService.getSetsArray(this.currentWorkout);
-// **********
-
-    console.log(this.sets);
     console.log(this.currentWorkout);
-
+    console.log(this.sets);
     console.log(this.exerciseNameArray);
     console.log(this.countArray);
-  }
-
-  ngAfterViewInit() {
-    this.incrementNumber();
-    this.changeDetectorRef.detectChanges();
+    console.log(this.setNumArray);
   }
 
   ionViewDidLoad() {
@@ -132,27 +109,25 @@ export class DoWorkoutPage implements OnInit {
     this.navCtrl.pop();
   }
 
-  createItem(): FormGroup {
+  createItem(name, num): FormGroup {
       return this.formBuilder.group({
-        exerciseName: this.exerciseName,
-        setNum: '',
+        exerciseName: name,
+        setNum: num,
         weight: '',
         reps: ''
       });
     }
 
-  addItem(): void {
+  addItem(name, num): void {
     this.items = this.workoutForm.get('items') as FormArray;
-    this.items.push(this.createItem());
+    this.items.push(this.createItem(name, num));
   }
 
-  incrementNumber() {
-    if(this.count < this.exerciseNameArray.length){
-      this.count++;
+  addItems(namesArray, setNumsArray) {
+    namesArray.forEach((exercise, index) => {
+      const name = exercise;
+      const setNum = setNumsArray[index];
+      this.addItem(name, setNum);
+      });
     }
-    
-    this.changeDetectorRef.detectChanges();
-    return this.count
-  }
-
 }

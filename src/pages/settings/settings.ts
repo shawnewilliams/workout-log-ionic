@@ -67,7 +67,7 @@ export class SettingsPage implements OnInit {
     // Gives me an array of sets to for my *ngFor in the template
     this.sets = this.currentWorkout.exercise.map((item) => {
       // return new Array(item.sets);
-      return Array.apply(null, { length: item.sets })
+      return Array.apply(null, { length: item.sets });
     });
 
     this.flattenedSets = this.sets.reduce((a, b) => a.concat(b))
