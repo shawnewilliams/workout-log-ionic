@@ -11,6 +11,9 @@ import { WORKOUTS } from '../../shared/workouts';
 import { AddWorkoutPage } from '../add-workout/add-workout';
 import { DoWorkoutPage } from '../do-workout/do-workout';
 
+import { WorkoutProvider } from '../../providers/workout/workout';
+import { StorageProvider } from '../../providers/storage/storage';
+
 
 @Component({
   selector: 'page-home',
@@ -29,7 +32,8 @@ export class HomePage implements OnInit {
 
   constructor(public navCtrl: NavController,
     private formBuilder: FormBuilder,
-    public modalCtrl: ModalController,) {
+    public modalCtrl: ModalController,
+    private storageService: StorageProvider) {
 
     this.showWorkouts = true;
     this.showWorkout = false;
@@ -61,6 +65,7 @@ export class HomePage implements OnInit {
 
   addExercise(){
     this.exercises.push(this.newExerciseForm.value.exercise);
+    this.storageService.saveCreatedExercise(this.newExerciseForm.value.exercise);
     this.newExerciseForm.reset();
   }
 

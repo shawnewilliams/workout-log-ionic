@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Storage } from '@ionic/storage';
+
 import { EXERCISES } from '../../shared/exercises';
 import { Exercise } from '../../shared/exercise';
 
@@ -31,7 +33,8 @@ export class AddWorkoutPage implements OnInit{
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private storage: Storage ) {
 
       this.addWorkoutForm = this.formBuilder.group({
         name: ['', Validators.required],

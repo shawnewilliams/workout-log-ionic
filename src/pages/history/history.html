@@ -13,17 +13,24 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-card color="primary" *ngFor="let workout of workouts">
-    <ion-card-header color="primary">
-      <h2>{{ workout.name }}</h2>
+<ion-content padding> 
+  <div *ngIf="history">
+  <ion-card *ngFor="let workout of history" color="primary">
+      <ion-card-header color="primary">
+      <!-- {{ history.workoutName }} - {{ history.date | date}} -->
+        <h2>{{ workout.workoutName }} - {{ workout.date | date}}</h2>
+        
+      </ion-card-header>
+      <ion-item color="dark" *ngFor="let exercise of workout.items">
+        <p>{{ exercise.exerciseName }}</p>
+        <p>Set #: {{ exercise.setNum }}</p>
+        <p>Weight: {{ exercise.weight }}</p>
+        <p>Reps: {{ exercise.reps }}</p>
+      </ion-item>
+    
       
-      <!-- <ion-icon name="remove" item-end small *ngIf="showExercises"></ion-icon>
-      <ion-icon name="add" item-end small *ngIf="!showExercises"></ion-icon> -->
-    </ion-card-header>
-    <ion-item color="dark" *ngFor="let exercise of workout.exercise">
-      <p>{{ exercise.name }}</p>
-      <p>{{ exercise.sets }}</p>
-    </ion-item>
   </ion-card>
+
+  </div>
+  <button ion-button (click)="clear()">Clear History</button>
 </ion-content>

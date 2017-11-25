@@ -37,3 +37,6 @@ export const WORKOUTS: Workout[] = [
     }
     
 ]
+
+export const COMPLETEDWORKOUTS: any[] = [
+]
