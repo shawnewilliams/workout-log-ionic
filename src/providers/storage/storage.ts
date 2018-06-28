@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
 import { Storage } from '@ionic/storage';
-import { WORKOUTS } from '../../shared/workouts';
+import { WORKOUTS, COMPLETEDWORKOUTS } from '../../shared/workouts';
 import { EXERCISES } from '../../shared/exercises';
 
 /*
@@ -15,86 +15,125 @@ import { EXERCISES } from '../../shared/exercises';
 @Injectable()
 export class StorageProvider {
 
-  history: any[] = []; 
+  history: Array<any>;
   workouts = WORKOUTS;
   exercises = EXERCISES;
 
   constructor(
     private storage: Storage) {
     console.log('Hello StorageProvider Provider');
-    this.initializeStorage();
+    this.history = [];
+    this.getHistory();
+    this.initializeExercises();
+    this.initializeWorkouts();
   }
 
-  initializeStorage(){
-    this.storage.set('Exercises', this.exercises);
-    this.storage.set('Workouts', this.workouts);
+  initializeExercises(){
+    let exercises = [];
+    this.storage.get('Exercises').then((data) => {
+      if(data != null){
+        exercises.push(data)
+        this.exercises = exercises;
+        this.storage.set('Exercises', this.exercises);
+      } else {
+        this.storage.set('Exercises', this.exercises);
+      }
+    });
   }
 
-  getHistory() {
-    let history = []
-    // this.storage.forEach( (value, key, index) => {
-    //   this.storage.get(key).then((val)=> {
-    //       history.push(val);
-    //       console.log('val');
-    //        console.log(val);
-    //   });
-    // });
+  initializeWorkouts(){
+    this.storage.get('Workouts'). then((data) => {
+      if(data != null){
+        this.storage.set('Workouts', data);
+      } else {
+        this.storage.set('Workouts', this.workouts);
+      }
+    });
+  }
+
+  saveCompletedWorkout(value){
+    this.storage.get('completedWorkouts').then((data) => {
+      if(data != null){
+        data.push(value);
+        this.storage.set('completedWorkouts', data)
+      } else {
+        let array = []
+        array.push(value);
+        this.storage.set('completedWorkouts', array);
+      }
+    });
+   this.getHistory();
+  }
+
+  getHistory() { 
+    let history = [];
     this.storage.get('completedWorkouts').then((workouts) => {
-      history = workouts;
-      });
-    Promise.all(history).then(_=>{console.log('received data from storage')}).catch(err=>{console.log('SHOOT, one failed, aborting')})
-    this.history = history;
-    console.log('getHistory()');
-    console.log(history);
-    return history;
+      if(workouts != null) {
+        history.push(workouts);
+      }
+      return history
+    });
+      this.history = history;
+      return history
   }
 
   saveCreatedWorkout(value) {
-    this.workouts.push(value);
-    this.storage.set('Workouts', this.workouts);
+    this.storage.get('workouts').then((data) => {
+      if(data != null){
+        data.push(value);
+        this.storage.set('workouts', data);
+      } else {
+        let array = []
+        array.push(value);
+        this.storage.set('workouts', array);
+      }
+    });
   }
 
   getWorkouts() {
     let workouts = []
     
-    this.storage.get('Workouts').then((workout) => {
-      workouts = workout;
+    this.storage.get('Workouts').then((data) => {
+      if(data != null){
+      workouts.push(data);
+      }
+      return workouts
       });
-    Promise.all(workouts).then(_=>{console.log('received data from storage')}).catch(err=>{console.log('SHOOT, one failed, aborting')})
-    this.workouts = workouts;
-    console.log('getWorkouts()');
-    console.log(workouts);
     return workouts;
   }
 
   saveCreatedExercise(value) {
-    this.exercises.push(value);
-    this.storage.set('Exercises', this.exercises);
+    this.storage.get('Exercises').then((data) => {
+      if(data != null){
+        data.push(value);
+        this.storage.set('Exercises', data);
+      } else {
+        let array = []
+        array.push(value);
+        this.storage.set('Exercises', array);
+      }
+    })
+    // this.exercises.push(value);
+    // this.storage.set('Exercises', this.exercises);
   }
 
   getExercises() {
-    let exercises = []
+    let exercises = [];
     
-    this.storage.get('Exercises').then((exercise) => {
-      exercises = exercise;
+    this.storage.get('Exercises').then((data) => {
+      if(data != null){
+      exercises.push(data);
+      }
+      return exercises
       });
-    Promise.all(exercises).then(_=>{console.log('received data from storage')}).catch(err=>{console.log('SHOOT, one failed, aborting')})
     this.exercises = exercises;
-    console.log('getExercises()');
-    console.log(exercises);
-    return exercises;
-  }
-
-  saveCompletedWorkout(value){
-    this.history.push(value)
-    console.log('history after saveWorkout()')
-    console.log(this.history);
-    this.storage.set('completedWorkouts', this.history);
+    return exercises; 
   }
 
   clearStorage(){
     this.storage.clear();
-    this.getHistory();
-    this.initializeStorage();
+    this.history = [];
+    this.exercises = EXERCISES;
+    // this.initializeStorage();
   }
 }

@@ -1,8 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ItemSliding } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { Storage } from '@ionic/storage';
-
 
 // import { WorkoutProvider } from '../../providers/workout/workout';
 import { Workout } from '../../shared/workout';
@@ -29,7 +27,6 @@ export class DoWorkoutPage implements OnInit {
   
   workout: string;
   currentWorkout: Workout;
-  savedWorkouts: Workout[];
   sets: number[];
 
   showWorkout: boolean[]; //toggle workout
@@ -48,7 +45,6 @@ export class DoWorkoutPage implements OnInit {
     private formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
     private workoutService: WorkoutProvider,
-    private storage: Storage,
     private storageService: StorageProvider) {
 
       this.workout = this.navParams.get('workout');
@@ -56,8 +52,6 @@ export class DoWorkoutPage implements OnInit {
   }
 
   ngOnInit() {
-    
-    this.savedWorkouts = WORKOUTS;
     // this.completedWorkouts = COMPLETEDWORKOUTS;
   
     this.currentWorkout = this.workoutService.getWorkout(this.workout);
@@ -139,14 +133,7 @@ export class DoWorkoutPage implements OnInit {
     }
 
   saveData(){
-    // let completedWorkouts = this.storageService.getHistory();
-    // completedWorkouts.push(this.workoutForm.value);
-    // console.log('completedWorkouts');
-    // console.log(completedWorkouts)
-    // this.storageServi  ce.saveWorkout(this.workoutForm.value.date.toString(), this.workoutForm.value);
-    // this.storageService.history.push(this.workoutForm.value);
     this.storageService.saveCompletedWorkout(this.workoutForm.value);
-    
   }
 
 

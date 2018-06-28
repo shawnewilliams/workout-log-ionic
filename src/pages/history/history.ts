@@ -1,9 +1,10 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { WORKOUTS } from '../../shared/workouts';
-import { Storage } from '@ionic/storage';
+import { WORKOUTS, COMPLETEDWORKOUTS } from '../../shared/workouts';
 
 import { StorageProvider } from '../../providers/storage/storage';
+import { Storage } from '@ionic/storage';
+import { COMMON_DEPRECATED_DIRECTIVES } from '@angular/common/src/directives';
 
 
 /**
@@ -20,16 +21,18 @@ import { StorageProvider } from '../../providers/storage/storage';
 })
 export class HistoryPage implements OnInit, DoCheck {
   
-  workouts;
-  history:  any[] = [];
+  workouts: Array<any>;
+  history: Array<any>;
 
   constructor(public navCtrl: NavController, 
       public navParams: NavParams,
       private storageService: StorageProvider,
-      private storage: Storage) {
-    this.workouts = WORKOUTS;
-    this.history = this.storageService.getHistory();  
-    
+      private storage: Storage) { 
+
+    // this.storage.get('completedWorkouts').then((workouts) => {
+    //   this.history = workouts;
+    // });
+
   }
 
   ionViewDidLoad() {
@@ -37,32 +40,29 @@ export class HistoryPage implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    // this.history = this.storage.get('data').then(val => console.log(val));
+    // this.storageService.getHistory();
+    this.history = this.storageService.getHistory(); 
+    console.log('history')
+    console.log(this.history)
     
-    // this.getKeys();
-    // setTimeout(() => this.getWorkouts(this.storedKeys) ,100);
-    
-    // this.history = this.storageService.getWorkouts();  
-    console.log(this.history);
+    // console.log(this.storageService.getHistory()); 
+    // console.log(this.storageService.history)
   }
 
   ngDoCheck() {
-    if(this.history !== this.storageService.history) {
+    if(this.history != this.storageService.history) {
       this.history = this.storageService.getHistory();
       console.log('changed detected');
-      return true
+      // return true
     } else {
       console.log('nothing new here');
     }
   }
 
-
-
   clear(){
     this.storageService.clearStorage();
-    // this.history = this.storageService.getHistory();  
-    
   }
+
 }
 
 // getToken() {

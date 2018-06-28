@@ -25,3 +25,48 @@ ion-title {
     text-align: center;
 }
 
+ion-icon {
+    &[class*="custom-"] {
+        margin: 0 5px 0 0;
+        vertical-align: middle;
+        // $sz: 20px;
+        width: 40px;
+        height: 20px;
+    } // custom icons
+    &[class*="barbell"] {
+        background: url(../assets/imgs/barbell-outline.png) no-repeat 50% 50%;
+        background-size: contain;
+        opacity: .8;
+    }
+}
+
+.tabs-md .tab-button[aria-selected=true] .tab-button-icon {
+    &[class*="custom-"] {
+        margin: 0 5px 0 0;
+        vertical-align: middle;
+        // $sz: 20px;
+        width: 40px;
+        height: 20px;
+    } // custom icons 
+    &[class*="barbell"] {
+        background: url(../assets/imgs/barbell.png) no-repeat 50% 50%;
+        background-size: contain;
+        opacity: 1;
+    }
+  }
+  
+  .tabs-ios .tab-button[aria-selected=true] .tab-button-icon {
+    &[class*="custom-"] {
+        margin: 0 5px 0 0;
+        vertical-align: middle;
+        // $sz: 20px;
+        width: 40px;
+        height: 20px;
+    } // custom icons
+    &[class*="barbell"] {
+        background: url(../assets/imgs/barbell.png) no-repeat 50% 50%;
+        background-size: contain;
+        opacity: 1;
+    }
+  }
+

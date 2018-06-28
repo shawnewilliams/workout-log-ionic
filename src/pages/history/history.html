@@ -15,7 +15,7 @@
 
 <ion-content padding> 
   <div *ngIf="history">
-  <ion-card *ngFor="let workout of history" color="primary">
+  <ion-card *ngFor="let workout of history[0]" color="primary">
       <ion-card-header color="primary">
       <!-- {{ history.workoutName }} - {{ history.date | date}} -->
         <h2>{{ workout.workoutName }} - {{ workout.date | date}}</h2>

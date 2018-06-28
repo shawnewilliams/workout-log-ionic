@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, ItemSliding } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { HTTP } from '@ionic-native/http';
 
 // import { WorkoutProvider } from '../../providers/workout/workout';
 import { Workout } from '../../shared/workout';
@@ -29,6 +30,7 @@ export class SettingsPage implements OnInit {
   savedWorkouts: Workout[];
   sets;
   flattenedSets;
+  exercises;
 
   showWorkout;
 
@@ -37,7 +39,8 @@ export class SettingsPage implements OnInit {
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private http: HTTP) {
 
       this.workout = this.navParams.get('workout');
       console.log(this.workout)
@@ -90,6 +93,29 @@ export class SettingsPage implements OnInit {
     console.log('ionViewDidLoad DoWorkoutPage');
   }
 
+  getExercises() {
+    this.http.get('http://localhost:3000/exercises', {}, {
+    })
+  .then(data => {
+    // this.exercises = Object.keys(data.data);
+    
+    this.exercises = JSON.parse(data.data);
+
+    console.log(this.exercises);
+    console.log(data.status);
+    console.log(data.data); // data received by server
+    console.log(data.headers);
+    // this.exercises = this.exercises.exercises;
+  })
+  .catch(error => {
+
+    console.log(error.status);
+    console.log(error.error); // error message as string
+    console.log(error.headers);
+
+  });
+  }
+
   toggleWorkout(index) {
     this.showWorkout[index] = !this.showWorkout[index];
     console.log(this.showWorkout)
@@ -135,5 +161,7 @@ export class SettingsPage implements OnInit {
     this.items = this.orderForm.get('items') as FormArray;
     this.items.push(this.createItem());
   }
+
+
 
 }

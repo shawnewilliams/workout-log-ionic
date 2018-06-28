@@ -14,6 +14,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { AddWorkoutPage } from '../pages/add-workout/add-workout';
 import { DoWorkoutPage } from '../pages/do-workout/do-workout';
 
+import { HTTP } from '@ionic-native/http';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { WorkoutProvider } from '../providers/workout/workout';
@@ -56,6 +57,7 @@ import { StorageProvider } from '../providers/storage/storage';
     WorkoutProvider,
     ProcessHttpmsgProvider,
     StorageProvider,
+    HTTP
   ]
 })
 export class AppModule {}
